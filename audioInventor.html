@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Simple generador de audio</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <script>
+        // Creamos el contexto de audio
+        var _audioContexto;
+        // Creamos el oscilador que es el generador de señales
+        var _oscilador;
+
+        function cambiarSenal(frecuencia,tipoOnda) {
+            _oscilador.type=tipoOnda; // Standard values are "sine", "square", "sawtooth", "triangle" and "custom". The default is "sine".
+            _oscilador.frequency.value=frecuencia; //The default value is 440 Hz (a standard middle-A note).
+            var _lblFrecuencia=document.getElementById("lblFrecuencia");
+            var _lblTipoOnda=document.getElementById("lblTipoOnda");
+            _lblFrecuencia.innerHTML="Valor min: "+_oscilador.frequency.minValue+"; Valor actual: "+
+                                    _oscilador.frequency.value+"; Valor max: "+_oscilador.frequency.maxValue;
+            _lblTipoOnda.innerHTML=_oscilador.type;
+        }
+
+        function iniciarAudio(){
+            // Creamos el contexto de audio
+            _audioContexto = new (window.AudioContext || window.webkitAudioContext)();
+            // Creamos el oscilador que es el generador de señales
+            _oscilador=_audioContexto.createOscillator();
+            // Conectamos el oscilador a la fuente de audio
+            _oscilador.connect(_audioContexto.destination);
+            _oscilador.start();
+        }
+
+        function detenerAudio(){
+            _oscilador.stop();
+        }
+    </script>
+</head>
+<body>
+    Frecuencia:   <span id="lblFrecuencia" style="font-style: italic;"></span><br/>
+    Tipo de onda: <span id="lblTipoOnda"  style="font-style: italic;"></span><br/>
+    <button name="btnGenerarAudio" onclick="crearAudio(600,'triangle')">Generar Audio</button>
+</body>
+</html>
